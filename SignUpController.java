@@ -10,8 +10,6 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
-import static MainWindow.SetupSocket.*;
-
 public class SignUpController {
 
     @FXML
@@ -40,33 +38,37 @@ public class SignUpController {
     private int userid;
     private LocalDate dateOfSignUp;
 
+    private SetupSocket server;
+
+    public void initialize() throws Exception{
+        server = SetupSocket.getINSTANCE();
+    }
+
 
     @FXML
     public void saveData() throws Exception{
 
-        setupSocket();
 
-        Dout.write(0);
+        server.getDout().write(0);
 
-        Dout.writeUTF(first_name.getText());
-        Dout.writeUTF(last_name.getText());
-        Dout.writeUTF(email_id.getText());
-        Dout.writeUTF(contact_no.getText());
-        Dout.writeUTF(username.getText());
-        Dout.writeUTF(password.getText());
-        Dout.writeUTF(cpassword.getText());
-        Dout.writeUTF(birthday.getText());
-        Dout.writeUTF(gender.getText());
-        Dout.writeUTF(about.getText());
+        server.getDout().writeUTF(first_name.getText());
+        server.getDout().writeUTF(last_name.getText());
+        server.getDout().writeUTF(email_id.getText());
+        server.getDout().writeUTF(contact_no.getText());
+        server.getDout().writeUTF(username.getText());
+        server.getDout().writeUTF(password.getText());
+        server.getDout().writeUTF(cpassword.getText());
+        server.getDout().writeUTF(birthday.getText());
+        server.getDout().writeUTF(gender.getText());
+        server.getDout().writeUTF(about.getText());
 
         dateOfSignUp = LocalDate.now();
-        Dout.writeUTF(dateOfSignUp.toString());
+        server.getDout().writeUTF(dateOfSignUp.toString());
         userid = Math.abs(username.hashCode());
         System.out.println(userid);
-        Dout.writeInt(userid);
+        server.getDout().writeInt(userid);
 
-
-        if(Din.readBoolean()) {
+        if(server.getDin().readBoolean()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText("Success!");
             alert.setContentText("Your account has been successfully created! You can Sign In!");
@@ -78,8 +80,6 @@ public class SignUpController {
             alert.setContentText("Please Retry!");
             alert.showAndWait();
         }
-
-        closeSocket();
     }
 
     @FXML
