@@ -4,7 +4,7 @@ import java.sql.*;
 import java.net.*;
 import java.io.*;
 
-public class Main
+public class MainServer
 {
     public static void main(String a[]) throws Exception
     {
@@ -14,12 +14,16 @@ public class Main
         String user = "DarkKnight532";
         String pass = "DarkKnight";
 
-        boolean permission = false;
+        boolean permission;
 
-        ServerSocket SS = new ServerSocket(1080);
-        Socket S = SS.accept();
-        DataInputStream Din = new DataInputStream(S.getInputStream());
-        DataOutputStream Dout = new DataOutputStream(S.getOutputStream());
+            ServerSocket SS = new ServerSocket(1080);
+            Socket S = SS.accept();
+            DataInputStream Din = new DataInputStream(S.getInputStream());
+            DataOutputStream Dout = new DataOutputStream(S.getOutputStream());
+
+        while(true) {
+
+            permission = false;
 
             if (Din.readBoolean()) {
 
@@ -42,7 +46,7 @@ public class Main
 
                     con.close();
                     rs.close();
-                } catch (Exception ex){
+                } catch (Exception ex) {
                     System.err.println(ex);
                 }
 
@@ -74,6 +78,8 @@ public class Main
 
                     int p = st.executeUpdate(sql);
 
+                    System.out.println(p);
+
                     if (p == 1)
                         permission = true;
 
@@ -83,6 +89,7 @@ public class Main
                 } catch (Exception ex) {
                     Dout.writeBoolean(permission);
                     System.err.println(ex);
+                }
             }
         }
     }
