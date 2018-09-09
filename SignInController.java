@@ -1,15 +1,7 @@
-package MainWindow;
-
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
-
-import static MainWindow.SetupSocket.*;
 
 public class SignInController {
     @FXML
@@ -19,19 +11,24 @@ public class SignInController {
     @FXML
     private PasswordField passWord;
 
+    private SetupSocket server;
+
+    public void initialize() throws Exception{
+        server = SetupSocket.getINSTANCE();
+    }
+
     @FXML
     public void onSignIn() throws Exception{
 
-        setupSocket();
+        server.getDout().write(1);
 
-        Dout.write(1);
+        server.getDout().writeUTF(userName.getText());
+        server.getDout().writeUTF(passWord.getText());
 
-        Dout.writeUTF(userName.getText());
-        Dout.writeUTF(passWord.getText());
-
-        boolean permission = Din.readBoolean();
+        boolean permission = server.getDin().readBoolean();
 
         if(permission == true){
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Authentication Successful!!!");
             alert.showAndWait();
@@ -40,8 +37,6 @@ public class SignInController {
             alert.setContentText("Access Denied!!!");
             alert.showAndWait();
         }
-
-        closeSocket();
     }
 
     @FXML
