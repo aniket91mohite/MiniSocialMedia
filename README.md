@@ -2,6 +2,6 @@
 
 Run the server program seperately.
 
-Run server every time you hit sign in or finish button.
+Now, server will be handled automatically on button clicks :) 
 
 Change username and pasword of oracle database according to your database in server program.
