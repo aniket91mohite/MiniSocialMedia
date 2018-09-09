@@ -19,4 +19,8 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 640, 480));
         primaryStage.show();
     }
-}
+
+    @Override
+    public void stop() throws Exception {
+            SetupSocket.closeSocket();
+    }
