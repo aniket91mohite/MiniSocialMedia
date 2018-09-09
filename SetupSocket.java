@@ -6,24 +6,41 @@ import java.net.Socket;
 
 public class SetupSocket {
 
-    public static Socket S;
-    public static DataInputStream Din;
-    public static DataOutputStream Dout;
-    public static SetupSocket instance = new SetupSocket();
+    private static Socket S;
+    private static DataInputStream Din;
+    private static DataOutputStream Dout;
+    private static SetupSocket INSTANCE;
 
-    public static SetupSocket getInstance(){
-        return instance;
-    }
-
-    public static void setupSocket() throws Exception {
+    private SetupSocket() throws Exception{
         S = new Socket("localhost", 1080);
         Din = new DataInputStream(S.getInputStream());
         Dout = new DataOutputStream(S.getOutputStream());
     }
 
-    public static void closeSocket() throws Exception {
-        Dout.close();
-        Din.close();
+    static {
+        try {
+            INSTANCE = new SetupSocket();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static SetupSocket getINSTANCE() {
+        return INSTANCE;
+    }
+
+    public static DataInputStream getDin() {
+        return Din;
+    }
+
+    public static DataOutputStream getDout() {
+        return Dout;
+    }
+
+    public static void closeSocket() throws Exception{
         S.close();
+        Din.close();
+        Dout.close();
     }
 }
